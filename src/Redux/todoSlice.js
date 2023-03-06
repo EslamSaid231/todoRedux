@@ -25,6 +25,23 @@ export const toggleCompleteAsync = createAsyncThunk(
     }
   }
 );
+export const updateTodoAsync = createAsyncThunk(
+  "todos/updateTodoAsync",
+  async (payload) => {
+    const response = await fetch(`http://localhost:7000/todos/${payload.id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ id: payload.id, title: payload.title }),
+    });
+    if (response.ok) {
+      const todo = await response.json();
+      return { id: todo.id, title: todo.title };
+    }
+  }
+);
+
 export const addTodoAsync = createAsyncThunk(
   "todos/addTodoAsync",
   async (payload) => {
@@ -77,6 +94,13 @@ const todoSlice = createSlice({
     deleteTodo: (state, action) => {
       return state.filter((todo) => todo.id !== action.payload.id);
     },
+    updatePost: (state, action) => {
+      return state.map((todo) => {
+        if (todo.id === action.payload.id) {
+          todo.title = action.payload.title;
+        }
+      });
+    },
   },
   extraReducers: {
     [getTodosAsync.pending]: (state, action) => {
@@ -95,6 +119,10 @@ const todoSlice = createSlice({
     },
     [DeleteTodoAsync.fulfilled]: (state, action) => {
       return state.filter((todo) => todo.id !== action.payload.id);
+    },
+    [updateTodoAsync.fulfilled]: (state, action) => {
+      const index = state.findIndex((todo) => todo.id === action.payload.id);
+      state[index].title = action.payload.title;
     },
   },
 });

@@ -1,13 +1,17 @@
-import React, { useEffect } from "react";
+import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import {
   DeleteTodoAsync,
   getTodosAsync,
-  TodoActions,
   toggleCompleteAsync,
+  updateTodoAsync,
 } from "../Redux/todoSlice";
 
 const TodoItem = ({ id, title, completed }) => {
+  const [isEdit, setIsEdit] = useState(false);
+  const [updatedTitle, setUpdatedTitle] = useState("");
+
+  const [Itemid, setItemId] = useState(null);
   const dispatch = useDispatch();
   const handleComplete = () => {
     dispatch(toggleCompleteAsync({ id: id, completed: !completed }));
@@ -16,7 +20,10 @@ const TodoItem = ({ id, title, completed }) => {
   const handleDelete = () => {
     dispatch(DeleteTodoAsync({ id }));
   };
-
+  const handleUpdate = () => {
+    dispatch(updateTodoAsync({ id: id, title: updatedTitle }));
+    setIsEdit(false);
+  };
   return (
     <li className={`list-group-item ${completed && "list-group-item-success"}`}>
       <div className="d-flex justify-content-between">
@@ -29,9 +36,30 @@ const TodoItem = ({ id, title, completed }) => {
           ></input>
           {title}
         </span>
-        <button className="btn btn-danger" onClick={handleDelete}>
-          Delete
-        </button>
+        <div>
+          {" "}
+          <button
+            className="btn btn-danger"
+            onClick={() => {
+              setIsEdit(true);
+              setItemId(id);
+            }}
+          >
+            Edit
+          </button>
+          <button className="btn btn-danger" onClick={handleDelete}>
+            Delete
+          </button>
+        </div>
+        <br />
+
+        {isEdit && Itemid === id && (
+          <div>
+            <input onChange={(e) => setUpdatedTitle(e.target.value)} />
+
+            <button onClick={handleUpdate}>Update</button>
+          </div>
+        )}
       </div>
     </li>
   );
