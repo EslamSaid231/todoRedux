@@ -9,7 +9,7 @@ import {
 
 const TodoItem = ({ id, title, completed }) => {
   const [isEdit, setIsEdit] = useState(false);
-  const [updatedTitle, setUpdatedTitle] = useState("");
+  const [updatedTitle, setUpdatedTitle] = useState(title);
 
   const [Itemid, setItemId] = useState(null);
   const dispatch = useDispatch();
@@ -21,7 +21,9 @@ const TodoItem = ({ id, title, completed }) => {
     dispatch(DeleteTodoAsync({ id }));
   };
   const handleUpdate = () => {
-    dispatch(updateTodoAsync({ id: id, title: updatedTitle }));
+    if (updatedTitle.length > 0) {
+      dispatch(updateTodoAsync({ id: id, title: updatedTitle }));
+    }
     setIsEdit(false);
   };
   return (
@@ -34,10 +36,21 @@ const TodoItem = ({ id, title, completed }) => {
             checked={completed}
             onChange={handleComplete}
           ></input>
-          {title}
+          {isEdit && Itemid === id ? (
+            <div className="d-flex justify-content-between">
+              <br />
+              <input
+                onChange={(e) => setUpdatedTitle(e.target.value)}
+                value={updatedTitle}
+              />
+
+              <button onClick={handleUpdate}>Update</button>
+            </div>
+          ) : (
+            <span> {title}</span>
+          )}
         </span>
         <div>
-          {" "}
           <button
             className="btn btn-danger"
             onClick={() => {
@@ -51,15 +64,6 @@ const TodoItem = ({ id, title, completed }) => {
             Delete
           </button>
         </div>
-        <br />
-
-        {isEdit && Itemid === id && (
-          <div>
-            <input onChange={(e) => setUpdatedTitle(e.target.value)} />
-
-            <button onClick={handleUpdate}>Update</button>
-          </div>
-        )}
       </div>
     </li>
   );
