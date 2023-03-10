@@ -47,7 +47,7 @@ const TodoItem = ({ id, title, completed }) => {
               <button onClick={handleUpdate}>Update</button>
             </div>
           ) : (
-            <span> {title}</span>
+            <span className="d-flex"> {title}</span>
           )}
         </span>
         <div>

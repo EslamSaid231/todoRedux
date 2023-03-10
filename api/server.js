@@ -47,16 +47,6 @@ app.post("/todos", (req, res) => {
   todos.push(todo);
   return res.send(todo);
 });
-
-app.patch("/todos/:id", (req, res) => {
-  const id = req.params.id;
-  const index = todos.findIndex((todo) => todo.id === id);
-  const completed = Boolean(req.body.completed);
-  if (index > -1) {
-    todos[index].completed = completed;
-  }
-  res.send(todos[index]);
-});
 app.put("/todos/:id", (req, res) => {
   const id = req.params.id;
   const index = todos.findIndex((todo) => todo.id === id);
@@ -67,9 +57,19 @@ app.put("/todos/:id", (req, res) => {
   res.send(todos[index]);
 });
 
+app.patch("/todos/:id", (req, res) => {
+  const id = req.params.id;
+  const index = todos.findIndex((todo) => todo.id == id);
+  const completed = Boolean(req.body.completed);
+  if (index > -1) {
+    todos[index].completed = completed;
+  }
+  return res.send(todos[index]);
+});
+
 app.delete("/todos/:id", (req, res) => {
   const id = req.params.id;
-  const index = todos.findIndex((todo) => todo.id === id);
+  const index = todos.findIndex((todo) => todo.id == id);
   if (index > -1) {
     todos.splice(index, 1);
   }
