@@ -1,6 +1,6 @@
 const express = require("express");
 const dotenv = require("dotenv");
-const colors = require("colors");
+
 const cors = require("cors");
 const { json } = require("body-parser");
 const { nanoid } = require("nanoid");
@@ -59,7 +59,7 @@ app.put("/todos/:id", (req, res) => {
 
 app.patch("/todos/:id", (req, res) => {
   const id = req.params.id;
-  const index = todos.findIndex((todo) => todo.id == id);
+  const index = todos.findIndex((todo) => todo.id === id);
   const completed = Boolean(req.body.completed);
   if (index > -1) {
     todos[index].completed = completed;
@@ -69,7 +69,7 @@ app.patch("/todos/:id", (req, res) => {
 
 app.delete("/todos/:id", (req, res) => {
   const id = req.params.id;
-  const index = todos.findIndex((todo) => todo.id == id);
+  const index = todos.findIndex((todo) => todo.id === id);
   if (index > -1) {
     todos.splice(index, 1);
   }
@@ -77,6 +77,6 @@ app.delete("/todos/:id", (req, res) => {
   res.send(todos);
 });
 
-const PORT = 7000;
+const PORT = 3000;
 
-app.listen(PORT, console.log(`Server running on port ${PORT}`.green.bold));
+app.listen(PORT);

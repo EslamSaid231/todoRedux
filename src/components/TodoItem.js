@@ -3,6 +3,7 @@ import { useDispatch } from "react-redux";
 import {
   DeleteTodoAsync,
   getTodosAsync,
+  TodoActions,
   toggleCompleteAsync,
   updateTodoAsync,
 } from "../Redux/todoSlice";
@@ -14,15 +15,15 @@ const TodoItem = ({ id, title, completed }) => {
   const [Itemid, setItemId] = useState(null);
   const dispatch = useDispatch();
   const handleComplete = () => {
-    dispatch(toggleCompleteAsync({ id: id, completed: !completed }));
+    dispatch(TodoActions.toggleComplete({ id: id, completed: !completed }));
   };
 
   const handleDelete = () => {
-    dispatch(DeleteTodoAsync({ id }));
+    dispatch(TodoActions.deleteTodo({ id }));
   };
   const handleUpdate = () => {
     if (updatedTitle.length > 0) {
-      dispatch(updateTodoAsync({ id: id, title: updatedTitle }));
+      dispatch(TodoActions.updatePost({ id: id, title: updatedTitle }));
     }
     setIsEdit(false);
   };

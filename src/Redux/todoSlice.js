@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 export const getTodosAsync = createAsyncThunk(
   "todos/getTodosAsync",
   async () => {
-    const response = await fetch("http://localhost:7000/todos");
+    const response = await fetch("http://localhost:3000/todos");
     if (response.ok) {
       const todos = await response.json();
       return { todos };
@@ -12,7 +12,7 @@ export const getTodosAsync = createAsyncThunk(
 export const toggleCompleteAsync = createAsyncThunk(
   "todos/completeTodoAsync",
   async (payload) => {
-    const response = await fetch(`http://localhost:7000/todos/${payload.id}`, {
+    const response = await fetch(`http://localhost:3000/todos/${payload.id}`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
@@ -28,7 +28,7 @@ export const toggleCompleteAsync = createAsyncThunk(
 export const updateTodoAsync = createAsyncThunk(
   "todos/updateTodoAsync",
   async (payload) => {
-    const response = await fetch(`http://localhost:7000/todos/${payload.id}`, {
+    const response = await fetch(`http://localhost:3000/todos/${payload.id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -45,7 +45,7 @@ export const updateTodoAsync = createAsyncThunk(
 export const addTodoAsync = createAsyncThunk(
   "todos/addTodoAsync",
   async (payload) => {
-    const response = await fetch("http://localhost:7000/todos", {
+    const response = await fetch("http://localhost:3000/todos", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -61,7 +61,7 @@ export const addTodoAsync = createAsyncThunk(
 export const DeleteTodoAsync = createAsyncThunk(
   "todos/deleteTodoAsync",
   async (payload) => {
-    const response = await fetch(`http://localhost:7000/todos/${payload.id}`, {
+    const response = await fetch(`http://localhost:3000/todos/${payload.id}`, {
       method: "DELETE",
     });
     if (response.ok) {
@@ -95,11 +95,8 @@ const todoSlice = createSlice({
       return state.filter((todo) => todo.id !== action.payload.id);
     },
     updatePost: (state, action) => {
-      return state.map((todo) => {
-        if (todo.id === action.payload.id) {
-          todo.title = action.payload.title;
-        }
-      });
+      const index = state.findIndex((todo) => todo.id === action.payload.id);
+      state[index].title = action.payload.title;
     },
   },
   extraReducers: {
